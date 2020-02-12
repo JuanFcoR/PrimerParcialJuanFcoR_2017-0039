@@ -8,9 +8,10 @@ namespace PrimerParcialJuanFcoR_2017_0039.Data
 {
     public class Contexto : DbContext
     {
+        public DbSet<Articulos> Articulos { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=.\SqlExpress;Database=PrimerParcialDb;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(@"Server=.\SqlExpress;Database= NewPrimerParcialDB1;Trusted_Connection=True;");
         }
     }
 }

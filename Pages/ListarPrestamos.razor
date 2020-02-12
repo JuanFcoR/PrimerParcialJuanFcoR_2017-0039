@@ -1,0 +1,60 @@
+﻿@page "/rListaPrestamos"
+@using PrimerParcialJuanFcoR_2017_0039.Data
+@using PrimerParcialJuanFcoR_2017_0039.Pages
+<h3>ListarPrestamos</h3>
+
+
+@if (forecasts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ArticuloId</th>
+                <th>Fecha</th>
+                <th>Descripcion</th>
+                <th>Costo</th>
+                <th>Ganancia</th>
+                <th>Precio</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts)
+            {
+            <tr>
+                <td>@forecast.ArtticuloId</td>
+                <td>@forecast.Fecha.ToShortDateString()</td>
+                <td>@forecast.Descripcion</td>
+                <td>@forecast.Costo</td>
+                <td>@forecast.Ganancia</td>
+                <td>@forecast.Precio</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+
+@code {
+
+
+
+    Articulos articulos = new Articulos();
+    public Contexto contexto = new Contexto();
+    public List<Articulos> forecasts;
+   
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = ArticulosController.GetList(p=>true);
+    }
+
+
+}

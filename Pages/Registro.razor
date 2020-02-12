@@ -1,0 +1,166 @@
+﻿@page "/RArticulos"
+@using PrimerParcialJuanFcoR_2017_0039.Data;
+<h3>Registro</h3>
+<h1> @Estado</h1>
+<EditForm Model="articulos" OnValidSubmit="Buscar">
+    <div class="form-group">
+        <div class="form-row">
+            <div class="col col-md-1">
+                <label for="ArticuloIdNumber">ArticuloID: </label>
+            </div>
+            <div class="col- col-md-3">
+                <InputNumber id="ArticuloIdNumber" class="form-control" @bind-Value="articulos.ArtticuloId"/>
+            </div>
+            <div class="col col-md-5">
+                <button id="BuscarButton" @onclick="Buscar" class="btn btn-primary">Buscar</button>
+            </div>
+
+
+        </div>
+
+
+    </div>
+</EditForm>
+
+
+
+<EditForm Model="articulos" OnValidSubmit="Guardando">
+
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+
+    <div class="form-group">
+        <div class="form-row">
+            <div class="col col-md-1">
+                <label for="FechaDate">Fecha: </label>
+            </div>
+            <div class="col col-md-6">
+                <InputDate id="FechaDate" class="form-control" @bind-Value="articulos.Fecha" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="form-row">
+            <div class="col col-md-1">
+                <label for="DescripcionText">Descripcion: </label>
+            </div>
+            <div class="col col-md-6">
+                <InputText id="DescripcionText" class="form-control" @bind-Value="articulos.Descripcion" />
+            </div>
+
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="form-row">
+            <div class="col col-md-1">
+                <label for="CostoNumber">Costo: </label>
+            </div>
+            <div class="col col-md-6">
+                <InputNumber id="CostoNumber" class="form-control" @bind-Value="articulos.Costo" />
+            </div>
+
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="form-row">
+            <div class="col col-md-1">
+                <label for="GananciaNumber">Ganancia: </label>
+            </div>
+            <div class="col col-md-6">
+                <InputNumber id="GananciaNumber" class="form-control" @bind-Value="articulos.Ganancia" />
+            </div>
+
+        </div>
+    </div>
+
+    <div class="form-group">
+
+        <div class="form-row">
+            <div class="col col-md-1">
+                <label for="PrecioNumber">Precio: </label>
+            </div>
+            <div class="col col-md-6">
+                <InputNumber id="PrecioNumber" class="form-control" @bind-Value="articulos.Precio" />
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+    <div class="form-row">
+        <div class="col">
+            <button id="LimpiarButton" @onclick="Nuevo" class="btn btn-primary">Nuevo</button>
+        </div>
+        <div class="col">
+            <button id="GuardarButton" type="submit" class="btn btn-success">Guardar</button>
+        </div>
+        <div class="col">
+            <button id="GuardarButon" @onclick="Borrar" class="btn btn-success">Borrar</button>
+        </div>
+
+    </div>
+
+</EditForm>
+
+@code {
+    public Articulos articulos = new Articulos();
+    string Estado;
+
+    public void Guardando()
+    {
+        int num = Convert.ToInt32(articulos.ArtticuloId);
+        if ( num== 0)
+        {
+            Contexto db = new Contexto();
+            Calcular(articulos);
+            ArticulosController.Guardar(articulos);
+            Estado = "Se a guerdado";
+            Nuevo();
+        }
+        else
+        {
+            ArticulosController.Modificar(articulos);
+            Estado = "Modifico";
+            Nuevo();
+        }
+
+
+
+    }
+
+    public void Nuevo()
+    {
+        articulos = new Articulos();
+    }
+
+    public void Buscar()
+    {
+        Articulos temp = new Articulos();
+
+        int num = articulos.ArtticuloId;
+        temp = ArticulosController.Buscar(num);
+        if(articulos.ArtticuloId!=0)
+            articulos = temp;
+        Estado = "Busco";
+    }
+
+    public void Borrar()
+    {
+        ArticulosController.Eliminar(articulos.ArtticuloId);
+        Estado = "Elimino";
+
+    }
+
+    public void Calcular(Articulos art)
+    {
+        decimal precio;
+        art.Precio = (art.Ganancia / 100)*art.Costo+(art.Costo);
+    }
+}
